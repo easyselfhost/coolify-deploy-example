@@ -1,6 +1,5 @@
 [phases.setup]
 nixPkgs = ['nodejs_22']
-aptPkgs = ['build-essential']
 
 [phases.install]
 cmds = ["npm install"]
