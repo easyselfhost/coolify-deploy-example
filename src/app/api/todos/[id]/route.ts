@@ -1,4 +1,6 @@
-import { prisma } from "@/lib/db";
+import { db } from "@/db";
+import { todos } from "@/db/schema";
+import { eq } from "drizzle-orm";
 import { NextResponse } from "next/server";
 
 export async function PUT(
@@ -13,22 +15,23 @@ export async function PUT(
       return NextResponse.json({ error: "ID is required" }, { status: 400 });
     }
 
-    const updatedTodo = await prisma.todo.update({
-      where: { id },
-      data: {
+    const updatedTodo = await db
+      .update(todos)
+      .set({
         content,
         status,
-        updatedAt: new Date(), // Explicitly set updatedAt
-      },
-    });
+        updatedAt: new Date(),
+      })
+      .where(eq(todos.id, id))
+      .returning();
 
-    return NextResponse.json(updatedTodo);
-  } catch (error) {
-    console.error(`Error updating todo ${(await params).id}:`, error);
-    // Check for Prisma's specific error code for record not found (P2025)
-    if (typeof error === 'object' && error !== null && 'code' in error && (error as { code: unknown }).code === 'P2025') {
+    if (!updatedTodo.length) {
       return NextResponse.json({ error: "Todo not found" }, { status: 404 });
     }
+
+    return NextResponse.json(updatedTodo[0]);
+  } catch (error) {
+    console.error(`Error updating todo ${(await params).id}:`, error);
     return NextResponse.json(
       { error: "Failed to update todo" },
       { status: 500 }
@@ -47,17 +50,18 @@ export async function DELETE(
       return NextResponse.json({ error: "ID is required" }, { status: 400 });
     }
 
-    await prisma.todo.delete({
-      where: { id },
-    });
+    const deletedTodo = await db
+      .delete(todos)
+      .where(eq(todos.id, id))
+      .returning();
 
-    return NextResponse.json({ message: "Todo deleted successfully" }, { status: 200 }); // Or 204 No Content
-  } catch (error) {
-    console.error(`Error deleting todo ${(await params).id}:`, error);
-    // Check for Prisma's specific error code for record not found (P2025)
-    if (typeof error === 'object' && error !== null && 'code' in error && (error as { code: unknown }).code === 'P2025') {
+    if (!deletedTodo.length) {
       return NextResponse.json({ error: "Todo not found" }, { status: 404 });
     }
+
+    return NextResponse.json({ message: "Todo deleted successfully" }, { status: 200 });
+  } catch (error) {
+    console.error(`Error deleting todo ${(await params).id}:`, error);
     return NextResponse.json(
       { error: "Failed to delete todo" },
       { status: 500 }

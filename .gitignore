@@ -39,3 +39,14 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# dev db
+**/*.db
+**/*.db-journal
+**/*.db-trace
+**/*.sqlite
+**/*.sqlite-journal
+**/*.sqlite-trace
+**/*.sqlite-wal
+**/*.sqlite-shm
+**/*.sqlite-lock

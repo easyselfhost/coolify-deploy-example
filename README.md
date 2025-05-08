@@ -1,36 +1,76 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Kanban Board Todo App
+
+A simple Kanban board app built with Next.js, React, and Drizzle ORM.
+
+## Features
+
+- Drag-and-drop kanban board using @dnd-kit library
+- SQLite database with Drizzle ORM
+- Full CRUD operations for todos
+- Responsive design
+
+## Tech Stack
+
+- Next.js 15
+- React 19
+- Drizzle ORM with SQLite
+- Tailwind CSS
+- TypeScript
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+
+- Node.js 18+ and npm
+
+### Installation
+
+1. Clone the repository
+2. Install dependencies:
+
+```bash
+npm install
+```
+
+3. Set up the database:
+
+```bash
+npm run db:push
+```
+
+4. Start the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+5. Open [http://localhost:3000](http://localhost:3000) in your browser to see the application.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Database Management
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+This project uses Drizzle ORM with SQLite. You can use the following commands to manage your database:
 
-## Learn More
+- `npm run db:generate` - Generate migrations based on your schema changes
+- `npm run db:push` - Apply schema changes directly to the database
+- `npm run db:studio` - Open Drizzle Studio to manage your database
 
-To learn more about Next.js, take a look at the following resources:
+## Project Structure
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- `/src/app` - Next.js app router pages and API routes
+- `/src/components` - React components
+- `/src/db` - Drizzle database schema and connection
+- `/src/types` - TypeScript type definitions
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Data Migration
 
-## Deploy on Vercel
+If you're migrating from the previous Prisma-based version, you can run:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```bash
+npm run db:migrate-from-prisma
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+This will transfer your existing data from the Prisma SQLite database to the Drizzle database.
+
+## License
+
+MIT
