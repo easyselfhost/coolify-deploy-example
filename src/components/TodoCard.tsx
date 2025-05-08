@@ -5,6 +5,14 @@ import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { Todo, TodoStatus } from '@/types';
 import { Trash2 } from 'lucide-react'; // Using lucide-react for icons
+import { Button } from "@/components/ui/button"; // Added import
+import { 
+  Card, 
+  // CardContent, // Removed unused import
+  CardFooter, 
+  CardHeader, // Though not used for a title, CardHeader can group top content
+  // CardTitle, CardDescription not used here as the content is simple
+} from "@/components/ui/card"; // Added Card imports
 
 interface TodoCardProps {
   todo: Todo;
@@ -27,30 +35,36 @@ export default function TodoCard({ todo, columnId, onDelete, isDragging }: TodoC
   };
 
   return (
-    <div
+    <Card // Changed div to Card
       ref={setNodeRef}
       style={style}
       {...attributes}
       {...listeners}
-      className={`bg-white p-3 rounded-md shadow-sm border border-gray-200 hover:shadow-md transition-shadow ${isDragging ? 'ring-2 ring-indigo-500' : ''} ${isOver ? 'ring-2 ring-blue-400' : ''}`}
+      className={`hover:shadow-md transition-shadow ${isDragging ? 'ring-2 ring-indigo-500' : ''} ${isOver ? 'ring-2 ring-blue-400' : ''}`}
+      //{/* Removed bg-white, p-3, rounded-md, shadow-sm, border, border-gray-200 as Card handles this */}
       aria-describedby={`todo-content-${todo.id}`}
     >
-      <div className="flex justify-between items-start">
-        <p id={`todo-content-${todo.id}`} className="text-sm text-gray-700 break-words">{todo.content}</p>
+      <CardHeader className="flex flex-row justify-between items-start p-4"> {/* Added CardHeader and padding*/}
+        <p id={`todo-content-${todo.id}`} className="text-sm text-gray-700 break-words mr-2">{todo.content}</p> {/* Added mr-2 for spacing*/}
         {onDelete && (
-          <button 
+          <Button
+            variant="ghost"
+            size="icon"
             onClick={(e) => { 
-              e.stopPropagation(); // Prevent dnd listeners from firing
+              e.stopPropagation();
               onDelete(todo.id); 
             }}
-            className="text-gray-400 hover:text-red-500 transition-colors ml-2 p-1 rounded hover:bg-red-100"
             aria-label="Delete todo"
+            //{/* Removed custom hover/text color as ghost variant handles this well enough */}
+            //{/* className="text-gray-400 hover:text-red-500 transition-colors ml-2 rounded hover:bg-red-100" */}
           >
             <Trash2 size={16} />
-          </button>
+          </Button>
         )}
-      </div>
-      <p className="text-xs text-gray-400 mt-2">ID: {todo.id.substring(0,8)}</p>
-    </div>
+      </CardHeader>
+      <CardFooter className="text-xs text-gray-400 p-4 pt-0"> {/* Added CardFooter and padding, removed mt-2*/}
+        ID: {todo.id.substring(0,8)}
+      </CardFooter>
+    </Card>
   );
 } 

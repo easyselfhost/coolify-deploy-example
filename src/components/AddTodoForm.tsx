@@ -2,6 +2,15 @@
 
 import React, { useState } from 'react';
 import { TodoStatus } from '@/types';
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { 
+  Select, 
+  SelectContent, 
+  SelectItem, 
+  SelectTrigger, 
+  SelectValue 
+} from "@/components/ui/select";
 
 interface AddTodoFormProps {
   onAddTodo: (content: string, status: TodoStatus) => Promise<void>;
@@ -43,33 +52,36 @@ export default function AddTodoForm({ onAddTodo, columns }: AddTodoFormProps) {
       {error && <p className="text-red-500 text-sm mb-2">{error}</p>}
       
       <div className="flex flex-col sm:flex-row gap-3">
-        <input
+        <Input
           type="text"
           value={content}
           onChange={(e) => setContent(e.target.value)}
           placeholder="Enter todo content..."
-          className="flex-grow p-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
+          className="flex-grow"
           disabled={isSubmitting}
         />
         
-        <select
+        <Select
           value={status}
-          onChange={(e) => setStatus(e.target.value as TodoStatus)}
-          className="p-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
+          onValueChange={(value: TodoStatus) => setStatus(value)}
           disabled={isSubmitting}
         >
-          {columns.map(col => (
-            <option key={col.id} value={col.id}>{col.title}</option>
-          ))}
-        </select>
+          <SelectTrigger className="w-[180px]">
+            <SelectValue placeholder="Select status" />
+          </SelectTrigger>
+          <SelectContent>
+            {columns.map(col => (
+              <SelectItem key={col.id} value={col.id}>{col.title}</SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
         
-        <button
+        <Button
           type="submit"
           disabled={isSubmitting}
-          className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-50"
         >
           {isSubmitting ? 'Adding...' : 'Add Todo'}
-        </button>
+        </Button>
       </div>
     </form>
   );
