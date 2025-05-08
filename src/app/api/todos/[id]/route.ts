@@ -3,11 +3,11 @@ import { NextResponse } from "next/server";
 
 export async function PUT(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const { content, status } = await request.json();
-    const id = params.id;
+    const id = (await params).id;
 
     if (!id) {
       return NextResponse.json({ error: "ID is required" }, { status: 400 });
@@ -24,7 +24,7 @@ export async function PUT(
 
     return NextResponse.json(updatedTodo);
   } catch (error) {
-    console.error(`Error updating todo ${params.id}:`, error);
+    console.error(`Error updating todo ${(await params).id}:`, error);
     // Check for Prisma's specific error code for record not found (P2025)
     if (typeof error === 'object' && error !== null && 'code' in error && (error as { code: unknown }).code === 'P2025') {
       return NextResponse.json({ error: "Todo not found" }, { status: 404 });
@@ -38,10 +38,10 @@ export async function PUT(
 
 export async function DELETE(
   request: Request, // request is not used but required by Next.js route handler signature
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const id = params.id;
+    const id = (await params).id;
 
     if (!id) {
       return NextResponse.json({ error: "ID is required" }, { status: 400 });
@@ -53,7 +53,7 @@ export async function DELETE(
 
     return NextResponse.json({ message: "Todo deleted successfully" }, { status: 200 }); // Or 204 No Content
   } catch (error) {
-    console.error(`Error deleting todo ${params.id}:`, error);
+    console.error(`Error deleting todo ${(await params).id}:`, error);
     // Check for Prisma's specific error code for record not found (P2025)
     if (typeof error === 'object' && error !== null && 'code' in error && (error as { code: unknown }).code === 'P2025') {
       return NextResponse.json({ error: "Todo not found" }, { status: 404 });
