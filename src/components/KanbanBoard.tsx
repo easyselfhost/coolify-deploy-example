@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { DndContext, closestCenter, DragEndEvent, DragOverlay, useSensor, PointerSensor, KeyboardSensor } from '@dnd-kit/core';
 import { SortableContext, arrayMove, rectSortingStrategy } from '@dnd-kit/sortable';
 import { KanbanColumnOrder, KanbanColumnMap, Todo, TodoStatus, ColumnDragItem } from '@/types';
@@ -12,15 +12,29 @@ interface BoardData {
   [key: string]: ColumnDragItem;
 }
 
+interface KanbanBoardProps {
+  onTodosUpdated?: (todos: {
+    backlog: Todo[];
+    'in-progress': Todo[];
+    done: Todo[];
+  }) => void;
+  initialTodos?: {
+    backlog: Todo[];
+    'in-progress': Todo[];
+    done: Todo[];
+  };
+}
+
 const initialBoardData: BoardData = KanbanColumnOrder.reduce((acc, status) => {
   acc[status] = { id: status, title: KanbanColumnMap[status], todos: [] };
   return acc;
 }, {} as BoardData);
 
-export default function KanbanBoard() {
+export default function KanbanBoard({ onTodosUpdated, initialTodos }: KanbanBoardProps) {
   const [columns, setColumns] = useState<BoardData>(initialBoardData);
   const [activeTodo, setActiveTodo] = useState<Todo | null>(null);
   const [activeColumnId, setActiveColumnId] = useState<TodoStatus | null>(null);
+  const isUpdatingFromParent = useRef(false);
 
   const sensors = [
     useSensor(PointerSensor),
@@ -30,6 +44,37 @@ export default function KanbanBoard() {
   useEffect(() => {
     fetchTodos();
   }, []);
+
+  // Handle initialTodos changes coming from parent
+  useEffect(() => {
+    if (initialTodos) {
+      isUpdatingFromParent.current = true;
+      
+      const newColumns = { ...initialBoardData };
+      KanbanColumnOrder.forEach(status => {
+        newColumns[status] = { 
+          ...newColumns[status], 
+          todos: initialTodos[status] || [] 
+        };
+      });
+      
+      setColumns(newColumns);
+    }
+  }, [initialTodos]);
+
+  // Update the parent component when columns change
+  useEffect(() => {
+    // Only update parent if change wasn't initiated by parent
+    if (onTodosUpdated && !isUpdatingFromParent.current) {
+      onTodosUpdated({
+        backlog: columns.backlog.todos,
+        'in-progress': columns['in-progress'].todos,
+        done: columns.done.todos
+      });
+    }
+    // Reset the flag after the effect
+    isUpdatingFromParent.current = false;
+  }, [columns, onTodosUpdated]);
 
   const fetchTodos = async () => {
     try {
