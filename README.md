@@ -61,6 +61,22 @@ This project uses Drizzle ORM with SQLite. You can use the following commands to
 - `/src/db` - Drizzle database schema and connection
 - `/src/types` - TypeScript type definitions
 
+## Authentication (Optional)
+
+This application supports optional single-user authentication using environment variables. If `AUTH_USERNAME` and `AUTH_PASSWORD` are not provided, authentication will be skipped.
+
+To enable authentication, create a `.env.local` file in the root of your project and add the following variables:
+
+```
+AUTH_USERNAME=your_username
+AUTH_PASSWORD=your_password
+AUTH_SECRET=your_super_secret_jwt_key_at_least_32_characters_long
+```
+
+- `AUTH_USERNAME`: The username for authentication.
+- `AUTH_PASSWORD`: The password for authentication.
+- `AUTH_SECRET`: A secret key used to sign JWT tokens. It should be a long, random string (at least 32 characters).
+
 ## Data Migration
 
 If you're migrating from the previous Prisma-based version, you can run:
