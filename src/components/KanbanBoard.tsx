@@ -5,7 +5,7 @@ import { DndContext, closestCenter, DragEndEvent, DragOverlay, useSensor, Pointe
 import { SortableContext, arrayMove, rectSortingStrategy } from '@dnd-kit/sortable';
 import { KanbanColumnOrder, KanbanColumnMap, Todo, TodoStatus, ColumnDragItem } from '@/types';
 import KanbanColumn from '@/components/KanbanColumn';
-import TodoCard from '@/components/TodoCard'; // For DragOverlay
+import TodoCard from '@/components/TodoCard';
 import AddTodoForm from '@/components/AddTodoForm';
 
 interface BoardData {
@@ -230,10 +230,10 @@ export default function KanbanBoard({ onTodosUpdated, initialTodos }: KanbanBoar
 
   return (
     <DndContext sensors={sensors} collisionDetection={closestCenter} onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
-      <div className="w-full max-w-6xl mx-auto">
+      <div className="w-full max-w-6xl mx-auto mb-8">
         <AddTodoForm onAddTodo={handleAddTodo} columns={KanbanColumnOrder.map(id => ({id, title: KanbanColumnMap[id]}))} />
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8 w-full max-w-6xl mx-auto">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-6xl mx-auto">
         <SortableContext items={KanbanColumnOrder.slice()} strategy={rectSortingStrategy}>
           {KanbanColumnOrder.map(columnId => (
             <KanbanColumn 
@@ -248,9 +248,7 @@ export default function KanbanBoard({ onTodosUpdated, initialTodos }: KanbanBoar
       </div>
       <DragOverlay>
         {activeTodo && activeColumnId ? (
-           <div className="rounded-md bg-white p-3 shadow-lg border border-gray-200">
-            <TodoCard todo={activeTodo} columnId={activeColumnId} isDragging />
-           </div>
+          <TodoCard todo={activeTodo} columnId={activeColumnId} isDragging />
         ) : null}
       </DragOverlay>
     </DndContext>

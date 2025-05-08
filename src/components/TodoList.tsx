@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { Todo, TodoStatus } from '@/types';
 import { Checkbox } from "@/components/ui/checkbox";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Trash2, Plus } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -37,9 +37,11 @@ export default function TodoList({ todos, onToggleTodoStatus, onDeleteTodo, onAd
 
   return (
     <div className="w-full max-w-3xl mx-auto space-y-6">
-      <Card className="p-4">
-        <h2 className="text-xl font-semibold mb-4">Add New Task</h2>
-        <CardContent className="p-0">
+      <Card className="border border-border">
+        <CardHeader className="border-b pb-2">
+          <h2 className="text-xl font-semibold">Add New Task</h2>
+        </CardHeader>
+        <CardContent className="p-4">
           <form onSubmit={handleAddTodo} className="flex flex-col space-y-4">
             <div className="flex items-center gap-2">
               <Input
@@ -53,7 +55,7 @@ export default function TodoList({ todos, onToggleTodoStatus, onDeleteTodo, onAd
                 <select 
                   value={selectedStatus}
                   onChange={(e) => setSelectedStatus(e.target.value as TodoStatus)}
-                  className="h-10 px-3 py-2 rounded-md border border-gray-300 bg-white text-sm"
+                  className="h-10 px-3 py-2 rounded-md border border-input bg-background text-sm"
                 >
                   <option value="backlog">Backlog</option>
                   <option value="in-progress">In Progress</option>
@@ -72,19 +74,21 @@ export default function TodoList({ todos, onToggleTodoStatus, onDeleteTodo, onAd
         </CardContent>
       </Card>
 
-      <Card className="p-4">
-        <h2 className="text-xl font-semibold mb-4">Active Tasks</h2>
-        <CardContent className="p-0 space-y-2">
+      <Card className="border border-border">
+        <CardHeader className="border-b pb-2">
+          <h2 className="text-xl font-semibold">Active Tasks</h2>
+        </CardHeader>
+        <CardContent className="p-4 space-y-2">
           {uncompletedTodos.length === 0 ? (
-            <p className="text-gray-500 italic">No active tasks</p>
+            <p className="text-muted-foreground italic">No active tasks</p>
           ) : (
             uncompletedTodos.map((todo) => (
-              <div key={todo.id} className="flex items-center space-x-2 p-2 hover:bg-gray-50 rounded-md group">
+              <div key={todo.id} className="flex items-center space-x-2 p-2 hover:bg-muted/50 rounded-md group border border-border">
                 <Checkbox 
                   id={`todo-${todo.id}`}
                   checked={false}
                   onCheckedChange={() => onToggleTodoStatus(todo)}
-                  className="h-5 w-5"
+                  className="h-5 w-5 ml-2"
                 />
                 <label 
                   htmlFor={`todo-${todo.id}`} 
@@ -92,7 +96,7 @@ export default function TodoList({ todos, onToggleTodoStatus, onDeleteTodo, onAd
                 >
                   {todo.content}
                 </label>
-                <span className="text-xs text-gray-400">
+                <span className="text-xs text-muted-foreground">
                   {todo.status === 'backlog' ? 'Backlog' : 'In Progress'}
                 </span>
                 <Button
@@ -110,23 +114,25 @@ export default function TodoList({ todos, onToggleTodoStatus, onDeleteTodo, onAd
         </CardContent>
       </Card>
 
-      <Card className="p-4">
-        <h2 className="text-xl font-semibold mb-4">Completed Tasks</h2>
-        <CardContent className="p-0 space-y-2">
+      <Card className="border border-border">
+        <CardHeader className="border-b pb-2">
+          <h2 className="text-xl font-semibold">Completed Tasks</h2>
+        </CardHeader>
+        <CardContent className="p-4 space-y-2">
           {completedTodos.length === 0 ? (
-            <p className="text-gray-500 italic">No completed tasks</p>
+            <p className="text-muted-foreground italic">No completed tasks</p>
           ) : (
             completedTodos.map((todo) => (
-              <div key={todo.id} className="flex items-center space-x-2 p-2 hover:bg-gray-50 rounded-md group">
+              <div key={todo.id} className="flex items-center space-x-2 p-2 hover:bg-muted/50 rounded-md group border border-border">
                 <Checkbox 
                   id={`todo-${todo.id}`}
                   checked={true}
                   onCheckedChange={() => onToggleTodoStatus(todo)}
-                  className="h-5 w-5"
+                  className="h-5 w-5 ml-2"
                 />
                 <label 
                   htmlFor={`todo-${todo.id}`} 
-                  className="flex-grow text-sm line-through text-gray-500 cursor-pointer"
+                  className="flex-grow text-sm line-through text-muted-foreground cursor-pointer"
                 >
                   {todo.content}
                 </label>

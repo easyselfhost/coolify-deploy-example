@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { Todo, TodoStatus } from '@/types';
 import { Label } from '@/components/ui/label';
+import { ThemeToggle } from '@/components/ThemeToggle';
 
 type ViewMode = 'kanban' | 'todo';
 const VIEW_MODE_KEY = 'kanban-app-view-mode';
@@ -160,9 +161,9 @@ export default function HomePage() {
   };
 
   return (
-    <main className="flex flex-col items-center min-h-screen p-4 md:p-8 bg-gray-100">
-      <header className="mb-8 w-full flex justify-between items-center">
-        <h1 className="text-4xl font-bold text-gray-800">My Kanban Board</h1>
+    <main className="flex flex-col items-center min-h-screen bg-background text-foreground">
+      <header className="w-full flex justify-between items-center p-4 bg-card border-b sticky top-0 z-10">
+        <h1 className="text-4xl font-bold">My Kanban Board</h1>
         <div className="flex items-center space-x-6">
           <div className="flex items-center space-x-2">
             <Label htmlFor="view-mode" className="text-sm font-medium">
@@ -174,10 +175,11 @@ export default function HomePage() {
               onCheckedChange={handleViewModeChange}
             />
           </div>
+          <ThemeToggle />
           <Button
             onClick={handleLogout}
             variant="destructive"
-            className="focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
+            className="focus:ring-2 focus:ring-destructive focus:ring-offset-2"
           >
             Logout
           </Button>
@@ -185,17 +187,21 @@ export default function HomePage() {
       </header>
       
       {viewMode === 'kanban' ? (
-        <KanbanBoard 
-          onTodosUpdated={handleTodosUpdated} 
-          initialTodos={todos}
-        />
+        <div className="w-full px-4 md:px-8 mt-8">
+          <KanbanBoard 
+            onTodosUpdated={handleTodosUpdated} 
+            initialTodos={todos}
+          />
+        </div>
       ) : (
-        <TodoList 
-          todos={todos} 
-          onToggleTodoStatus={handleToggleTodoStatus} 
-          onDeleteTodo={handleDeleteTodo}
-          onAddTodo={handleAddTodo}
-        />
+        <div className="w-full px-4 md:px-8 mt-8">
+          <TodoList 
+            todos={todos} 
+            onToggleTodoStatus={handleToggleTodoStatus} 
+            onDeleteTodo={handleDeleteTodo}
+            onAddTodo={handleAddTodo}
+          />
+        </div>
       )}
     </main>
   );

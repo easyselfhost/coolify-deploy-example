@@ -11,6 +11,7 @@ import {
   SelectTrigger, 
   SelectValue 
 } from "@/components/ui/select";
+import { Card, CardHeader, CardContent } from "@/components/ui/card";
 
 interface AddTodoFormProps {
   onAddTodo: (content: string, status: TodoStatus) => Promise<void>;
@@ -46,43 +47,48 @@ export default function AddTodoForm({ onAddTodo, columns }: AddTodoFormProps) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="p-4 bg-white rounded-lg shadow-md mb-6">
-      <h3 className="text-lg font-medium mb-3 text-gray-800">Add New Todo</h3>
-      
-      {error && <p className="text-red-500 text-sm mb-2">{error}</p>}
-      
-      <div className="flex flex-col sm:flex-row gap-3">
-        <Input
-          type="text"
-          value={content}
-          onChange={(e) => setContent(e.target.value)}
-          placeholder="Enter todo content..."
-          className="flex-grow"
-          disabled={isSubmitting}
-        />
-        
-        <Select
-          value={status}
-          onValueChange={(value: TodoStatus) => setStatus(value)}
-          disabled={isSubmitting}
-        >
-          <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="Select status" />
-          </SelectTrigger>
-          <SelectContent>
-            {columns.map(col => (
-              <SelectItem key={col.id} value={col.id}>{col.title}</SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-        
-        <Button
-          type="submit"
-          disabled={isSubmitting}
-        >
-          {isSubmitting ? 'Adding...' : 'Add Todo'}
-        </Button>
-      </div>
-    </form>
+    <Card className="border border-border">
+      <CardHeader className="border-b pb-2">
+        <h3 className="text-lg font-medium">Add New Todo</h3>
+      </CardHeader>
+      <CardContent>
+        <form onSubmit={handleSubmit}>
+          {error && <p className="text-destructive text-sm mb-2">{error}</p>}
+          
+          <div className="flex flex-col sm:flex-row gap-3">
+            <Input
+              type="text"
+              value={content}
+              onChange={(e) => setContent(e.target.value)}
+              placeholder="Enter todo content..."
+              className="flex-grow"
+              disabled={isSubmitting}
+            />
+            
+            <Select
+              value={status}
+              onValueChange={(value: TodoStatus) => setStatus(value)}
+              disabled={isSubmitting}
+            >
+              <SelectTrigger className="w-[180px]">
+                <SelectValue placeholder="Select status" />
+              </SelectTrigger>
+              <SelectContent>
+                {columns.map(col => (
+                  <SelectItem key={col.id} value={col.id}>{col.title}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            
+            <Button
+              type="submit"
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? 'Adding...' : 'Add Todo'}
+            </Button>
+          </div>
+        </form>
+      </CardContent>
+    </Card>
   );
 } 

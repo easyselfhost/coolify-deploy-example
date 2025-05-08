@@ -40,12 +40,12 @@ export default function TodoCard({ todo, columnId, onDelete, isDragging }: TodoC
       style={style}
       {...attributes}
       {...listeners}
-      className={`hover:shadow-md transition-shadow ${isDragging ? 'ring-2 ring-indigo-500' : ''} ${isOver ? 'ring-2 ring-blue-400' : ''}`}
+      className={`hover:shadow-md transition-shadow ${isDragging ? 'ring-2 ring-primary' : ''} ${isOver ? 'ring-2 ring-primary' : ''}`}
       //{/* Removed bg-white, p-3, rounded-md, shadow-sm, border, border-gray-200 as Card handles this */}
       aria-describedby={`todo-content-${todo.id}`}
     >
       <CardHeader className="flex flex-row justify-between items-start p-4"> {/* Added CardHeader and padding*/}
-        <p id={`todo-content-${todo.id}`} className="text-sm text-gray-700 break-words mr-2">{todo.content}</p> {/* Added mr-2 for spacing*/}
+        <p id={`todo-content-${todo.id}`} className="text-sm break-words mr-2">{todo.content}</p> {/* Added mr-2 for spacing*/}
         {onDelete && (
           <Button
             variant="ghost"
@@ -62,7 +62,7 @@ export default function TodoCard({ todo, columnId, onDelete, isDragging }: TodoC
           </Button>
         )}
       </CardHeader>
-      <CardFooter className="text-xs text-gray-400 p-4 pt-0"> {/* Added CardFooter and padding, removed mt-2*/}
+      <CardFooter className="text-xs text-muted-foreground p-4 pt-0"> {/* Added CardFooter and padding, removed mt-2*/}
         ID: {todo.id.substring(0,8)}
       </CardFooter>
     </Card>

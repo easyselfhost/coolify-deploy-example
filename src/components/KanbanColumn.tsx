@@ -5,6 +5,7 @@ import { useSortable, SortableContext, verticalListSortingStrategy } from '@dnd-
 import { CSS } from '@dnd-kit/utilities';
 import { Todo, TodoStatus } from '@/types';
 import TodoCard from '@/components/TodoCard';
+import { Card, CardHeader, CardContent } from "@/components/ui/card";
 
 interface KanbanColumnProps {
   id: TodoStatus;
@@ -25,25 +26,29 @@ export default function KanbanColumn({ id, title, todos, onDeleteTodo }: KanbanC
   };
 
   return (
-    <div 
+    <Card 
       ref={setNodeRef} 
       style={style} 
       {...attributes}
       {...listeners}
-      className={`bg-gray-50 p-4 rounded-lg shadow min-h-[200px] flex flex-col ${isOver ? 'outline outline-2 outline-indigo-500' : ''}`}
+      className={`flex flex-col min-h-[200px] border border-border ${isOver ? 'outline outline-2 outline-primary' : ''}`}
     >
-      <h2 className="text-xl font-semibold mb-4 text-gray-700 sticky top-0 bg-gray-50 py-2 z-10">{title}</h2>
-      <SortableContext items={todos.map(todo => todo.id)} strategy={verticalListSortingStrategy}>
-        <div className="flex-grow space-y-3 overflow-y-auto">
-          {todos.length > 0 ? (
-            todos.map(todo => (
-              <TodoCard key={todo.id} todo={todo} columnId={id} onDelete={onDeleteTodo} />
-            ))
-          ) : (
-            <p className="text-gray-500 text-sm text-center pt-4">No tasks yet.</p>
-          )}
-        </div>
-      </SortableContext>
-    </div>
+      <CardHeader className="sticky top-0 z-10 pb-2 border-b">
+        <h2 className="text-xl font-semibold">{title}</h2>
+      </CardHeader>
+      <CardContent className="pt-0">
+        <SortableContext items={todos.map(todo => todo.id)} strategy={verticalListSortingStrategy}>
+          <div className="flex-grow space-y-3 overflow-y-auto">
+            {todos.length > 0 ? (
+              todos.map(todo => (
+                <TodoCard key={todo.id} todo={todo} columnId={id} onDelete={onDeleteTodo} />
+              ))
+            ) : (
+              <p className="text-muted-foreground text-sm text-center pt-4">No tasks yet.</p>
+            )}
+          </div>
+        </SortableContext>
+      </CardContent>
+    </Card>
   );
 } 
