@@ -8,4 +8,4 @@ cmds = ["npm install -g pnpm", "npx pnpm install"]
 cmds = ["npx pnpm build"]
 
 [start]
-cmd = "npx pnpm start"
+cmd = "npx pnpm drizzle-kit migrate; npx pnpm start"
