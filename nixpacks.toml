@@ -2,10 +2,10 @@
 nixPkgs = ['nodejs_22']
 
 [phases.install]
-cmds = ["npm install -g pnpm", "npm install"]
+cmds = ["npm install -g pnpm", "npx pnpm install"]
 
 [phases.build]
-cmds = ["npm run build"]
+cmds = ["npx pnpm build"]
 
 [start]
-cmd = "npm run start"
+cmd = "npx pnpm start"
