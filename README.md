@@ -2,6 +2,11 @@
 
 A simple Kanban board app built with Next.js, React, and Drizzle ORM.
 
+⚠️ **Note:** This is a demo application built primarily to showcase deployment on Coolify. It was vibe-coded, but may not be suitable for serious task management or production use. Feel free to play around with it, but maybe don't use it to manage your company's mission-critical projects! 😅
+
+The app demonstrates a simple implementation of a Kanban board and serves as a practical example of deploying a full-stack Next.js application on Coolify.
+
+
 ## Features
 
 - Drag-and-drop kanban board using @dnd-kit library
@@ -76,16 +81,6 @@ AUTH_SECRET=your_super_secret_jwt_key_at_least_32_characters_long
 - `AUTH_USERNAME`: The username for authentication.
 - `AUTH_PASSWORD`: The password for authentication.
 - `AUTH_SECRET`: A secret key used to sign JWT tokens. It should be a long, random string (at least 32 characters).
-
-## Data Migration
-
-If you're migrating from the previous Prisma-based version, you can run:
-
-```bash
-npm run db:migrate-from-prisma
-```
-
-This will transfer your existing data from the Prisma SQLite database to the Drizzle database.
 
 ## License
 
